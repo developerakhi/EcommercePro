@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Catagory;
 use App\Models\Order;
 use App\Models\Product;
+use PDF;
 use Illuminate\Http\Request;
 
 class AdminController extends Controller
@@ -115,5 +116,12 @@ class AdminController extends Controller
         $order->save();
 
         return redirect()->back();
+    }
+
+    public function print_pdf($id){
+        $order = Order::find($id);
+        $pdf = PDF::loadView('admin.pdf', compact('order'));
+
+        return $pdf->download('order_details');
     }
 }
