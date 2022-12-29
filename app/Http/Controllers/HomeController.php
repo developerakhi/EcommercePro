@@ -19,6 +19,7 @@ class HomeController extends Controller
     public function index(){
 
         $product = Product::paginate(6);
+
         $comment = Comment::orderby('id', 'desc')->get();
         $reply = Reply::all();
 
@@ -278,8 +279,18 @@ class HomeController extends Controller
         else{
             return redirect('login');
         }
+   }
 
+   public function product_search(Request $request){
 
+        $comment = Comment::orderby('id', 'desc')->get();
+        $reply = Reply::all();
+
+        $search_text = $request->search;
+        $product = Product::where('title', 'LIKE', "%$search_text%")
+        ->orWhere('catagory', 'LIKE', "$search_text")->paginate(10);
+        
+        return view('home.userpage', compact('product', 'comment', 'reply'));
    }
 
 
