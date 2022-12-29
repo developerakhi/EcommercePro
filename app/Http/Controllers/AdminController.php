@@ -8,15 +8,22 @@ use App\Models\Product;
 use App\Notifications\SendEmailNotification;
 use PDF;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Notification;
 
 
 class AdminController extends Controller
 {
     public function view_catagory(){
-        $data = Catagory::all();
 
-        return view('admin.catagory', compact('data'));
+        if(Auth::id()){
+
+            $data = Catagory::all();
+            return view('admin.catagory', compact('data'));
+        }
+        else {
+            return redirect('login');
+        }
     }
     public function add_catagory(Request $request){
         $data = new Catagory;
@@ -79,7 +86,9 @@ class AdminController extends Controller
     }
 
     public function update_product_confirm(Request $request, $id){
-        $product = Product::find($id);
+
+        if(Auth::id()){
+            $product = Product::find($id);
 
         $product->title = $request->title;
         $product->description = $request->description;
@@ -99,6 +108,12 @@ class AdminController extends Controller
         $product->save();
 
         return redirect()->back()->with('message', 'Product Updated Successfully');
+        }
+        else {
+            return redirect('login');
+        }
+
+        
 
     }
 
