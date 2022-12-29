@@ -27,9 +27,24 @@
                 <li class="nav-item">
                    <a class="nav-link" href="contact.html">Contact</a>
                 </li>
-                <li class="nav-item">
-                  <a class="nav-link" href="{{url('show_cart')}}">Cart</a>
-                </li>
+                @if (Route::has('login'))
+
+                        @auth
+
+                        <li class="nav-item">
+                           <a class="nav-link"  style="background-color: skyblue; " href="{{url('show_cart')}}">Cart[<span style="color: green;">{{App\Models\cart::where('user_id','=',Auth::user()->id)->count()}}]</span></a>
+                        </li>
+
+                        @else
+
+                         <li class="nav-item">
+                           <a class="nav-link"  style="background-color: skyblue; " href="{{url('show_cart')}}">Cart[0]</a>
+                        </li>
+
+                       
+                        @endauth
+
+               @endif
                 <li class="nav-item">
                   <a class="nav-link" href="{{url('show_order')}}">Order</a>
                 </li>

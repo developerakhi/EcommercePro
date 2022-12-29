@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\Session;
 use Stripe;
 use Illuminate\Support\Facades\Auth;
 use App\Models\User;
+use Illuminate\Console\View\Components\Alert;
 
 class HomeController extends Controller
 {
@@ -92,6 +93,8 @@ class HomeController extends Controller
                 }
 
                 $cart->save();
+                //  alert()->flash('Welcome back!', 'success');
+                // Alert::success('Product Added Successfully', 'We have added product to the cart');
 
                 return redirect()->back()->with('message', 'Product Added Successfully');
             }
