@@ -58,7 +58,7 @@
             </div>
           @endforeach
           <span style="padding-top: 20px;">
-            {!! $product->appends(Request::all())->links()!!}
+            {!! $product->withQueryString()->links('pagination::bootstrap-5')!!}
          </span>
     </div>
  </section>

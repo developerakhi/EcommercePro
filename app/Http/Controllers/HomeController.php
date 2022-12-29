@@ -3,8 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Models\Cart;
+use App\Models\Comment;
 use App\Models\Product;
 use App\Models\Order;
+use App\Models\Reply;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
 use Stripe;
@@ -17,8 +19,10 @@ class HomeController extends Controller
     public function index(){
 
         $product = Product::paginate(6);
+        $comment = Comment::orderby('id', 'desc')->get();
+        $reply = Reply::all();
 
-        return view('home.userpage', compact('product'));
+        return view('home.userpage', compact('product', 'comment', 'reply'));
     }
 
     public function redirect(){
@@ -46,7 +50,11 @@ class HomeController extends Controller
         }else{
 
             $product = Product::paginate(6);
-            return view('home.userpage', compact('product'));
+
+            $comment = Comment::orderby('id', 'desc')->get();
+            $reply = Reply::all();
+
+            return view('home.userpage', compact('product', 'comment', 'reply'));
         }
         
     }
@@ -233,4 +241,46 @@ class HomeController extends Controller
 
         return redirect()->back();
    }
+
+   public function add_comment(Request $request){
+
+        if(Auth::id()){
+
+            $comment = new Comment;
+            $comment->name = Auth::user()->name;
+            $comment->user_id = Auth::user()->id;
+
+            $comment->comment = $request->comment;
+
+            $comment->save();
+
+            return redirect()->back();
+        }
+        else {
+            return redirect('login');
+        }  
+   }
+
+   public function add_reply(Request $request){
+
+        if(Auth::id()){
+
+            $reply = new Reply;
+            $reply->name = Auth::user()->name;
+            $reply->user_id = Auth::user()->id;
+
+            $reply->comment_id = $request->commentId;
+            $reply->reply = $request->reply;
+            $reply->save();
+
+            return redirect()->back();
+        }
+        else{
+            return redirect('login');
+        }
+
+
+   }
+
+
 }
