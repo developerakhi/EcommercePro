@@ -20,6 +20,8 @@
                </div>
        @endif
        <div class="row">
+         @include('sweetalert::alert')
+
          @foreach ($product as $products)
             <div class="col-sm-6 col-md-4 col-lg-4">
                <div class="box">
